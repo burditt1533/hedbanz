@@ -13,9 +13,6 @@ const selectStartingWord = () => {
   gameStore.currentState = 'startingWord'
 }
 
-onMounted(() => {
-})
-
 </script>
 
 <template>
@@ -85,13 +82,14 @@ onMounted(() => {
 
           .team-name {
             font-weight: bold;
-            font-size: 55px;
-            line-height: 50px;
+            font-size: 40px;
+            line-height: 40px;
             margin-bottom: 10px;
           }
 
           .team-score {
             font-size: 40px;
+            line-height: 40px;
             font-weight: bold;
           }
 
@@ -107,7 +105,7 @@ onMounted(() => {
     .bottom {
       padding: 20px;
       display: flex;
-      justify-content: flex-end;
+      justify-content: center;
     }
   }
 

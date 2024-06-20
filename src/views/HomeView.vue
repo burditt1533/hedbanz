@@ -11,11 +11,8 @@ import GameHeader from '@/components/GameHeader.vue'
 import GameReviewRound from '@/components/GameReviewRound.vue'
 import GameChooseTeam from '@/components/GameChooseTeam.vue'
 
-// make website
-// make app
 // make back button work
 // make categories work
-// add settings menu
 // hide back button for certain views
 // able to edit points in review screen
 // come up with better navigation logic
@@ -27,6 +24,7 @@ import GameChooseTeam from '@/components/GameChooseTeam.vue'
 // logo ideas
 // color scheme
 // fix category modal and buttons
+// add way to pause/continue gameplay
 
 // make database
 // add a way to add/edit cards

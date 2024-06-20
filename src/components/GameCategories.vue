@@ -43,10 +43,14 @@ onMounted(() => {
       >
         <div class='category-name'>{{ category.name }}</div>
         <i :class="[category.icon, 'category-icon']"></i>
-        <div class="difficulty">
-          <div v-for='star in category.difficulty' :key='star' class="star">
-            ★
+        <div class="footer">
+          <div class="difficulty">
+            <div v-for='star in category.difficulty' :key='star' class="star">
+              ★
+            </div>
           </div>
+
+
         </div>
       </div>
     </div>
@@ -80,9 +84,10 @@ onMounted(() => {
 
   .bottom-section {
     width: 100%;
-    height: 70vh;
     background: white;
     color: #F04A22;
+    overflow: scroll;
+    padding-bottom: 50px;
 
     h2 {
       text-align: center;
@@ -103,14 +108,14 @@ onMounted(() => {
         font-weight: bold;
         padding: 10px;
         border-radius: 4px;
-        box-shadow: 0px 0px 3px rgb(110, 110, 110);
+        border: 1px solid #e4e4e4;
         display: flex;
         justify-content: center;
         align-items: center;
         flex-direction: column;
 
         .category-name {
-          font-size: 18px;
+          font-size: 16px;
           font-weight: bold;
         }
 

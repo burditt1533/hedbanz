@@ -105,8 +105,8 @@ const goToChooseTeam = () => {
           .list-title {
             font-weight: bold;
             font-size: 30px;
-            border-bottom: 1px solid #b52310;
             padding: 20px 20px 0;
+            border-top: 1px solid #c42612;
           }
         }
       }

@@ -64,16 +64,17 @@
       gap: 30px;
 
       .option {
-        font-size: 30px;
+        font-size: 23px;
         font-weight: bold;
-        padding: 20px;
+        padding: 15px;
         text-align: center;
-        border: 3px solid white;
+        border: 3px solid rgb(255 255 255 / 27%);
         border-radius: 8px;
         width: 90%;
 
         &.selected {
           background: white;
+          border-color: white;
           color: #EF2424;
         }
       }

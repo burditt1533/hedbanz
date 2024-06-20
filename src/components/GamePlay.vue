@@ -73,7 +73,7 @@
       :max='gameStore.options.secondsPerRound'
       :size='100'
       @click="gameStore.currentRound.secondsRemaining = 0"
-      :valueTemplate="(value) => value.toFixed(1)"
+      :valueTemplate="(value) => value.toFixed(0)"
     />
     <div class="cards-container">
       <Carousel
@@ -119,12 +119,16 @@
     .p-knob-text {
       fill: white;
       font-weight: bold;
-      font-size: 20px;
+      font-size: 18px;
     }
   }
 </style>
 
 <style scoped lang="scss">
+  .p-carousel {
+    pointer-events: none;
+  }
+
   .gameplay-container {
     width: 100%;
     color: white;
@@ -139,7 +143,7 @@
       width: 100%;
 
       .card-container {
-        max-width: 330px;
+        max-width: 90%;
         border: 1px solid white;
         border-radius: 10px;
         background: white;
@@ -151,17 +155,17 @@
         margin: 0 auto;
 
         .guess-action {
-          font-size: 31px;
+          font-size: 25px;
           font-weight: bold;
           border-bottom: 1px solid rgb(229, 229, 229);
           width: 100%;
-          padding: 20px;
+          padding: 10px;
           text-align: center;
         }
 
         .forbidden-words {
           padding: 20px;
-          font-size: 28px;
+          font-size: 23px;
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -185,6 +189,7 @@
       display: flex;
       width: 80%;
       justify-content: space-around;
+      margin-top: 40px;
     }
   }
 </style>
