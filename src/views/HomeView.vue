@@ -34,7 +34,6 @@ import GameChooseTeam from '@/components/GameChooseTeam.vue'
 // get biddy environment setup
   // node
   // vue
-  // git
 
 
 
