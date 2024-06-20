@@ -5,7 +5,8 @@ export const game = defineStore('game', {
   state: () => ({
     currentCategory: {},
     currentCard: {},
-    currentState: 'categories',
+    gameStates: ['categories', 'gameOptions', 'chooseTeam', 'startingWord', 'beforeStart', 'gamePlay', 'reviewRound'],
+    currentStateIndex: 0,
     currentRound: {
       teamId: 1,
       secondsRemaining: 60,
@@ -23,7 +24,7 @@ export const game = defineStore('game', {
     ],
     cards: [
       { id: 1, guessAction: 'Bowling', forbiddenWords: ['Ball', 'Alley', 'Bowl', 'Roll', 'Pin'], descriptiveHint: 'Bowling a bowling ball down a lane', timesPlayed: 0, isExplicit: false },
-      { id: 2, guessAction: 'Swimming In A Lake', forbiddenWords: ['Ball', 'Alley', 'Bowl', 'Roll', 'Pin'], descriptiveHint: 'Bowling a bowling ball down a lane', timesPlayed: 0, isExplicit: false },
+      { id: 2, guessAction: 'Swimming In A Lake', forbiddenWords: ['Stroke', 'Water', 'Bowl', 'Roll', 'Pin'], descriptiveHint: 'Bowling a bowling ball down a lane', timesPlayed: 0, isExplicit: false },
       { id: 3, guessAction: 'Motorboating Boobs', forbiddenWords: ['Ball', 'Alley', 'Bowl', 'Roll', 'Pin'], descriptiveHint: 'Bowling a bowling ball down a lane', timesPlayed: 0, isExplicit: true },
       { id: 4, guessAction: 'Eating Chips', forbiddenWords: ['Bag', 'Lays', 'Doritos', 'Potato', 'Dig'], descriptiveHint: 'Bowling a bowling ball down a lane', timesPlayed: 0, isExplicit: false },
       { id: 5, guessAction: 'Drinking Bath Water', forbiddenWords: ['Ball', 'Alley', 'Bowl', 'Roll', 'Pin'], descriptiveHint: 'Bowling a bowling ball down a lane', timesPlayed: 0, isExplicit: false },
@@ -51,8 +52,11 @@ export const game = defineStore('game', {
     },
   }),
   getters: {
-    currentTeam() {
+    currentTeam () {
       return this.teams.find((team) => this.currentRound.teamId === team.id) || {}
+    },
+    currentState () {
+      return this.gameStates[this.currentStateIndex]
     }
   },
   actions: {
@@ -67,6 +71,17 @@ export const game = defineStore('game', {
       }
 
       this.currentCard = {}
-    }
+    },
+    goToNextState () {
+      if (this.currentState === 'reviewRound') {
+        // go to choose team
+        this.currentStateIndex = 2
+      } else {
+        this.currentStateIndex++;
+      }
+    },
+    goToPrevState () {
+      this.currentStateIndex--;
+    },
   },
 })

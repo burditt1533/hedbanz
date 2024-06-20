@@ -14,7 +14,7 @@
   }
 
   const startGame = () => {
-    gameStore.currentState = 'gamePlay'
+    gameStore.goToNextState()
   }
 
   const menu = ref();
@@ -38,6 +38,10 @@
       menu.value.toggle(event);
   };
 
+  const isHideBack = computed((event) => {
+    return ['gamePlay', 'reviewRound', 'categories'].includes(gameStore.currentState)
+  });
+
   onMounted(() => {
     randomCards.value = _.sampleSize(gameStore.cards, 3)
   }) 
@@ -45,7 +49,7 @@
 
 <template>
   <div class='header-container'>
-    <i class="ri-arrow-left-s-line"></i>
+    <i @click='gameStore.goToPrevState' :class="['ri-arrow-left-s-line', { disabled: isHideBack }]"></i>
     <!-- <i class="ri-menu-line"></i> -->
     <div class='team-name'>{{ gameStore.currentTeam?.name }}</div>
     <i @click="toggle" class="ri-more-2-line"></i>
@@ -89,8 +93,9 @@
     padding: 10px;
     height: 7vh;
 
-    .settings-icon {
-      color: #F04A22;
+    .disabled {
+      opacity: 0.3;
+      pointer-events: none;
     }
 
     .team-name {

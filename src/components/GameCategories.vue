@@ -8,16 +8,16 @@ import Button from 'primevue/button';
 
 const gameStore = game()
 const isModalOpen = ref(false)
-const currentCategory = ref({})
+const clickedCategory = ref({})
 
 const playCategory = () => {
   isModalOpen.value = !isModalOpen.value
-  gameStore.updateCurrentCategory(currentCategory.value)
-  gameStore.currentState = 'gameOptions'
+  gameStore.updateCurrentCategory(clickedCategory.value)
+  gameStore.goToNextState()
 }
 
 const openModal = (category) => {
-  currentCategory.value = category
+  clickedCategory.value = category
   isModalOpen.value = !isModalOpen.value
 }
 
@@ -49,24 +49,34 @@ onMounted(() => {
               ★
             </div>
           </div>
-
-
         </div>
       </div>
     </div>
   </div>
 
-  <Dialog v-model:visible="isModalOpen" modal :header="currentCategory?.name" dismissableMask :style="{ width: '17rem' }">
-      <i :class="[currentCategory?.icon, 'category-icon']"></i>
-      <div class='description'>
-        {{ currentCategory?.description }}
-      </div>
-      <div class="flex justify-end gap-2">
+  <Dialog v-model:visible="isModalOpen" modal dismissableMask :style="{ width: '17rem' }">
+    <template #container>
+      <div class="modal-container">
+
+        <div class="modal-header">
+          <div class='modal-title'>{{ clickedCategory?.name }}</div>
+          <i :class="[clickedCategory?.icon, 'category-icon']"></i>
+        </div>
+        <div class='description'>
+          {{ clickedCategory?.description }}
+        </div>
+        <div class="difficulty">
+          <div v-for='star in clickedCategory.difficulty' :key='star' class="star">
+            ★
+          </div>
+        </div>
+        <div class="modal-buttons">
           <Button type="button" label="Cancel" severity="secondary" @click="isModalOpen = false"></Button>
           <Button type="button" label="Play" @click="playCategory"></Button>
+        </div>
       </div>
+    </template>
   </Dialog>
-
 </template>
 
 <style scoped lang="scss">
@@ -133,9 +143,45 @@ onMounted(() => {
     }
   }
 
-  .description {
-    margin-bottom: 40px;
+  .modal-container {
+    padding: 20px;
+
+    .modal-buttons {
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      margin: 0 auto;
+
+      button {
+        width: 100px;
+      }
+    }
+  
+    .modal-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      .modal-title {
+        font-size: 25px;
+        margin-right: 5px;
+        font-weight: bold;
+      }
+      .category-icon {
+        font-size: 25px;
+        line-height: 25px;
+      }
+    }
+
+    .description {
+      margin-bottom: 20px;
+    }
+
+    .difficulty {
+      display: flex;
+      justify-content: center;
+      font-size: 20px;
+      color: #F04A22;
+      margin-bottom: 20px;
+    }
   }
-
-
 </style>

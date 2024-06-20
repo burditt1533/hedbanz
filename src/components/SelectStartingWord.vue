@@ -13,7 +13,7 @@
   }
 
   const startGame = () => {
-    gameStore.currentState = 'beforeStart'
+    gameStore.goToNextState()
   }
 
   onMounted(() => {

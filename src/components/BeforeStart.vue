@@ -1,37 +1,38 @@
 <script setup>
   import { computed, ref, onMounted, watch } from 'vue'
   import { game } from '@/stores/game'
-  import _ from 'lodash';
-  import Button from 'primevue/button';
-  import router from '@/router'
   
   const gameStore = game()
-  const randomCards = ref([])
-
-  const selectCard = (card) => {
-    gameStore.currentCard = card
-  }
+  const countDownNumber = ref(4)
 
   const startGame = () => {
-    gameStore.currentState = 'gamePlay'
+    if (countDownNumber.value > 0) {
+      countDownNumber.value--
+      setTimeout(() => {
+        startGame();
+      }, 1000)
+    } else {
+      gameStore.goToNextState()
+      countDownNumber.value = 4
+    }
   }
-
-  onMounted(() => {
-    randomCards.value = _.sampleSize(gameStore.cards, 3)
-  }) 
 </script>
 
 <template>
-  <div class="top-section">
-    <div class="start-button" @click='startGame'>
+  <div class="game-before-start-container">
+    <div v-if='countDownNumber > 3' class="start-button" @click='startGame'>
       <div class='begin'>Begin</div>
       <div class='time'>{{ gameStore.options.secondsPerRound }}s</div>
+    </div>
+
+    <div v-else class="countdown">
+      {{ countDownNumber }}
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-  .top-section {
+  .game-before-start-container {
     width: 100%;
     color: white;
     display: flex;
@@ -62,6 +63,11 @@
         font-weight: bold;
         font-size: 30px;
       }
+    }
+    
+    .countdown {
+      font-size: 80px;
+      font-weight: bold;
     }
   }
 </style>

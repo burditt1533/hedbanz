@@ -10,7 +10,7 @@ const selectTeam = (teamId) => {
 }
 
 const selectStartingWord = () => {
-  gameStore.currentState = 'startingWord'
+  gameStore.goToNextState()
 }
 
 </script>

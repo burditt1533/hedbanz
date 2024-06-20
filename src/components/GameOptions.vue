@@ -10,7 +10,7 @@
   const startGame = () => {
     gameStore.currentRound.teamId = 1
     gameStore.initNextRound()
-    gameStore.currentState = 'chooseTeam'
+    gameStore.goToNextState()
   }
 
   const closeCallback = () => {

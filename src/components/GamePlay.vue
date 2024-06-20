@@ -39,7 +39,7 @@
       status: 'incomplete',
       teamId: gameStore.currentTeam.id
     })
-    gameStore.currentState = 'reviewRound'
+    gameStore.goToNextState()
   }
 
   const updateTime = () => {

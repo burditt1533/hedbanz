@@ -6,6 +6,11 @@ import _ from 'lodash';
 import Button from 'primevue/button';
 
 const gameStore = game()
+const cardTypes = ref([
+  { title: 'Completed', type: 'complete', amount: '+1' },
+  { title: 'Skipped', type: 'skipped', amount: '-1' },
+  { title: 'Incomplete', type: 'incomplete', amount: '' },
+])
 
 const groupedCards = computed(() => {
   return _.groupBy(gameStore.currentRound.playedCards, (card) => card.status) || {};
@@ -26,7 +31,14 @@ const goToChooseTeam = () => {
   gameStore.currentTeam.completedRounds.push(gameStore.currentRound)
 
   gameStore.initNextRound()
-  gameStore.currentState = 'chooseTeam'
+  gameStore.goToNextState()
+}
+
+const moveCard = (card) => {
+  let newStatus = 'complete'
+  if (card.status === 'complete') newStatus = 'skipped'
+  if (card.status === 'skipped') newStatus = 'incomplete'
+  card.status = newStatus
 }
 
 </script>
@@ -36,22 +48,15 @@ const goToChooseTeam = () => {
     <div class="middle">
       <div class="net-amount">{{ plusMinus }}{{ netScore }}</div>
       <div class="cards-container">
-        <div class="card-list">
-          <h4 class='list-title'>Completed</h4>
-          <div v-for='group in groupedCards.complete' :key='group.card?.id' class="card">
-            {{ group.card?.guessAction }} +1
-          </div>
-        </div>
-        <div class="card-list">
-          <h4 class='list-title'>Skipped</h4>
-          <div v-for='group in groupedCards.skipped' :key='group.card?.id' class="card">
-            {{ group.card?.guessAction }} -1
-          </div>
-        </div>
-        <div class="card-list incomplete">
-          <h4 class='list-title'>Incomplete</h4>
-          <div v-for='group in groupedCards.incomplete' :key='group.card?.id' class="card">
-            {{ group.card?.guessAction }}
+        <div v-for='cardType in cardTypes' :key='cardType.type' class="card-list">
+          <h4 class='list-title'>{{ cardType.title }}</h4>
+          <div
+            v-for='(groupCard) in groupedCards[cardType.type]'
+            :key='groupCard.card?.id'
+            class="card"
+            @click='moveCard(groupCard)'
+          >
+            <div>{{ groupCard.card?.guessAction }} {{ cardType.amount }}</div>
           </div>
         </div>
       </div>
@@ -91,12 +96,7 @@ const goToChooseTeam = () => {
           max-height: 300px;
           overflow-y: scroll;
           font-weight: bold;
-          // padding: 10px;
           width: 100%;
-
-          &.incomplete {
-            height: auto;
-          }
 
           .card {
             padding: 0 20px;
@@ -117,7 +117,6 @@ const goToChooseTeam = () => {
       display: flex;
       justify-content: flex-end;
     }
-
   }
 
 </style>
