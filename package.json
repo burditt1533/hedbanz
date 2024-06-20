@@ -9,12 +9,17 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@primevue/themes": "^4.0.0-rc.2",
+    "lodash": "^4.17.21",
     "pinia": "^2.1.7",
+    "primevue": "^4.0.0-rc.2",
+    "remixicon": "^4.3.0",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.4",
+    "sass": "^1.77.6",
     "vite": "^5.2.8"
   }
 }

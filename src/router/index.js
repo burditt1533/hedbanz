@@ -1,5 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import GameSettings from '@/components/GameOptions.vue'
+import SelectStartingWord from '@/components/SelectStartingWord.vue'
+import GamePlay from '@/components/GamePlay.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -10,13 +13,20 @@ const router = createRouter({
       component: HomeView
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue')
-    }
+      path: '/gameSettings',
+      name: 'gameSettings',
+      component: GameSettings
+    },
+    {
+      path: '/selectStartingWord',
+      name: 'selectStartingWord',
+      component: SelectStartingWord
+    },
+    {
+      path: '/gamePlay',
+      name: 'gamePlay',
+      component: GamePlay
+    },
   ]
 })
 
