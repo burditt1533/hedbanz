@@ -74,6 +74,7 @@ const moveCard = (card) => {
     flex-direction: column;
     color: white;
     flex-grow: 1;
+    overflow: hidden;
 
     .net-amount {
       font-size: 75px;
@@ -82,6 +83,9 @@ const moveCard = (card) => {
     }
 
     .middle {
+      display: flex;
+      flex-direction: column;
+      overflow: scroll;
 
       .cards-container {
         display: flex;
@@ -93,8 +97,6 @@ const moveCard = (card) => {
           display: flex;
           flex-direction: column;
           gap: 10px;
-          max-height: 300px;
-          overflow-y: scroll;
           font-weight: bold;
           width: 100%;
 
@@ -105,15 +107,19 @@ const moveCard = (card) => {
           .list-title {
             font-weight: bold;
             font-size: 30px;
-            padding: 20px 20px 0;
+            line-height: 30px;
+            padding: 10px 20px 0;
             border-top: 1px solid #c42612;
+            margin-bottom: 10px;
           }
         }
       }
     }
 
     .bottom {
-      padding: 20px;
+      // height: 200px;
+      border-top: 1px solid #c42612;
+      padding: 15px;
       display: flex;
       justify-content: flex-end;
     }

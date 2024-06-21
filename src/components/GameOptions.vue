@@ -4,8 +4,15 @@
   import Button from 'primevue/button';
   import router from '@/router'
   import InputText from 'primevue/inputtext';
+  import InputSwitch from 'primevue/inputswitch';
   
   const gameStore = game()
+
+  const gameOptions = ref([
+    { name: 'First To', option: 'pointsToWin', units: 'pts' },
+    { name: 'Number of Rounds', option: 'numberOfRounds', units: 'pts '},
+    { name: 'Seconds Per Round', option: 'secondsPerRound', units: '' },
+  ])
 
   const startGame = () => {
     gameStore.currentRound.teamId = 1
@@ -24,46 +31,30 @@
 
 <template>
   <div class="game-options-container">
-    <div class="teams">
-      <div v-for='(team, index) in gameStore.teams' :key='team.id' >
-        <InputText v-model="team.name" />
-        <div v-if='index < gameStore.teams.length - 1' class='vs'>
-          vs
-        </div>
-      </div>
-    </div>
+    <h4 class="option-heading">Game Options</h4>
 
-    <div class="game-option-section">
-      <h4 class="option-name">First To</h4>
-      <div class="option-container">
-        <i @click="changePointsToWin(-1, 'pointsToWin')" class="ri-arrow-left-s-line"></i>
-        <div class="option-value">
-          {{ gameStore.options.pointsToWin }}pts
-        </div>
-        <i @click="changePointsToWin(1, 'pointsToWin')" class="ri-arrow-right-s-line"></i>
-      </div>
-    </div>
+    <div class="options-wrapper">
 
-    <div class="game-option-section">
-      <h4 class="option-name">Number of Rounds</h4>
-      <div class="option-container">
-        <i @click="changePointsToWin(-1, 'numberOfRounds')" class="ri-arrow-left-s-line"></i>
-        <div class="option-value">
-          {{ gameStore.options.numberOfRounds }}
+      <div v-for='option in gameOptions' :key='option' class="game-option-section">
+        <h4 class="option-name">{{ option.name }}</h4>
+        <div class="option-container">
+          <i @click="changePointsToWin(-1, option.option)" class="ri-arrow-left-s-line"></i>
+          <div class="option-value">
+            {{ gameStore.options[option.option] }}{{ option.units }}
+          </div>
+          <i @click="changePointsToWin(1, option.option)" class="ri-arrow-right-s-line"></i>
         </div>
-        <i @click="changePointsToWin(1, 'numberOfRounds')" class="ri-arrow-right-s-line"></i>
       </div>
-    </div>
 
-    <div class="game-option-section">
-      <h4 class="option-name">Seconds Per Round</h4>
-      <div class="option-container">
-        <i @click="changePointsToWin(-1, 'secondsPerRound')" class="ri-arrow-left-s-line"></i>
-        <div class="option-value">
-          {{ gameStore.options.secondsPerRound }}
+      <div class="game-option-section">
+        <h4 class="option-name">Show Explicit Cards</h4>
+        <div class="option-container">
+          <div class="option-value">
+            <InputSwitch v-model="gameStore.isShowExplicitCards" />
+          </div>
         </div>
-        <i @click="changePointsToWin(1, 'secondsPerRound')" class="ri-arrow-right-s-line"></i>
       </div>
+
     </div>
 
     <div class="bottom">
@@ -81,48 +72,38 @@
     align-items: center;
     flex-direction: column;
     text-align: center;
+    padding: 10px;
 
-    .p-inputtext {
-      background: none;
-      font-size: 40px;
-      line-height: 40px;
+    .option-heading {
+      font-size: 25px;
       font-weight: bold;
-      box-shadow: none;
-      border: 0;
-      padding: 0;
-      text-align: center;
-      width: 80%;
-      margin: 6px auto;
-      color: white;
+      margin-bottom: 20px;
     }
 
-    .teams {
-      border-bottom: 1px solid #ca3619;
+    .options-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
       width: 100%;
-      padding: 20px 0;
-
-      .team-name {
-        font-size: 40px;
-        line-height: 40px;
-        font-weight: bold;
-      }
-
-      .vs {
-        font-size: 20px;
-        line-height: 20px;
-      }
     }
 
     .game-option-section {
       width: 100%;
       display: flex;
-      flex-direction: column;
+      background: #d1d1d124;
+      padding: 10px;
       align-items: center;
-      justify-content: center;
+      justify-content: space-between;
+      border-radius: 5px;
+      min-height: 75px;
+      box-shadow: 0 0 6px -4px rgb(0 0 0 / 49%);
+      color: white;
+      border: 1px solid #ce2d1c;
 
       .option-name {
         font-weight: bold;
-        font-size: 25px;
+        font-size: 18px;
         text-align: center;
       }
 
@@ -130,15 +111,17 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        width: 47%;
+        width: 35%;
 
         i {
-          font-size: 30px;
-          line-height: 30px;
+          font-size: 25px;
+          line-height: 25px;
         }
+
         .option-value {
           font-weight: bold;
-          font-size: 25px;
+          font-size: 18px;
+          width: 100%;
         }
       }
     }

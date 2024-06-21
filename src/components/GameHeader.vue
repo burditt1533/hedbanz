@@ -25,7 +25,7 @@
         {
           label: 'Finish Round',
           icon: 'ri-stop-fill',
-          command: () => gameStore.currentRound.secondsRemaining = 0
+          command: () => gameStore.finishRound()
         },
         {
           label: 'Reset',

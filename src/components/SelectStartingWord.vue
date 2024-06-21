@@ -17,7 +17,7 @@
   }
 
   onMounted(() => {
-    randomCards.value = _.sampleSize(gameStore.cards, 3)
+    randomCards.value = _.sampleSize(gameStore.filteredCards, 3)
   }) 
 </script>
 

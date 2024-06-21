@@ -3,16 +3,7 @@ import { defineStore } from 'pinia'
 
 export const game = defineStore('game', {
   state: () => ({
-    currentCategory: {},
-    currentCard: {},
-    isPaused: false,
-    gameStates: ['categories', 'gameOptions', 'chooseTeam', 'startingWord', 'beforeStart', 'gamePlay', 'reviewRound'],
-    currentStateIndex: 0,
-    currentRound: {
-      teamId: 1,
-      secondsRemaining: 60,
-      playedCards: [],
-    },
+    gameStates: ['categories', 'gameTeamSetup', 'gameOptions', 'chooseTeam', 'startingWord', 'beforeStart', 'gamePlay', 'reviewRound'],
     categories: [
       { id: 1, name: 'Sports', timesPlayed: 1, rating: 2, difficulty: 2, icon: 'ri-ping-pong-line', description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.' },
       { id: 2, name: 'Family', timesPlayed: 4, rating: 5, difficulty: 1, icon: 'ri-team-line', description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.' },
@@ -24,14 +15,24 @@ export const game = defineStore('game', {
       { id: 8, name: 'Frozen', timesPlayed: 2, rating: 2,  difficulty: 4, icon: 'ri-snowflake-line', description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.' },
     ],
     cards: [
-      { id: 1, guessAction: 'Bowling', forbiddenWords: ['Ball', 'Alley', 'Bowl', 'Roll', 'Pin'], descriptiveHint: 'Bowling a bowling ball down a lane', timesPlayed: 0, isExplicit: false },
-      { id: 2, guessAction: 'Swimming In A Lake', forbiddenWords: ['Stroke', 'Water', 'Bowl', 'Roll', 'Pin'], descriptiveHint: 'Bowling a bowling ball down a lane', timesPlayed: 0, isExplicit: false },
-      { id: 3, guessAction: 'Motorboating Boobs', forbiddenWords: ['Ball', 'Alley', 'Bowl', 'Roll', 'Pin'], descriptiveHint: 'Bowling a bowling ball down a lane', timesPlayed: 0, isExplicit: true },
-      { id: 4, guessAction: 'Eating Chips', forbiddenWords: ['Bag', 'Lays', 'Doritos', 'Potato', 'Dig'], descriptiveHint: 'Bowling a bowling ball down a lane', timesPlayed: 0, isExplicit: false },
-      { id: 5, guessAction: 'Drinking Bath Water', forbiddenWords: ['Ball', 'Alley', 'Bowl', 'Roll', 'Pin'], descriptiveHint: 'Bowling a bowling ball down a lane', timesPlayed: 0, isExplicit: false },
-      { id: 6, guessAction: 'Climbing Stairs', forbiddenWords: ['Ball', 'Alley', 'Bowl', 'Roll', 'Pin'], descriptiveHint: 'Bowling a bowling ball down a lane', timesPlayed: 0, isExplicit: true },
-      { id: 7, guessAction: 'Shooting a basketball', forbiddenWords: ['Hands', 'Throw', 'Launch', 'Curry', 'Sport'], descriptiveHint: 'Bowling a bowling ball down a lane', timesPlayed: 0, isExplicit: true },
+      { id: 1, guessAction: 'Bowling', forbiddenWords: [{word: 'Ball'}, {word: 'Alley'}, {word: 'Bowl'} ,{word: 'Roll'}, {word: 'Pin'}], descriptiveHint: 'Bowling a bowling ball down a lane', timesPlayed: 0, isExplicit: false },
+      { id: 2, guessAction: 'Swimming In A Lake', forbiddenWords: [{word: 'Stroke'}, {word: 'Water'}, {word: 'Bowl'} ,{word: 'Roll'}, {word: 'Pin'}], descriptiveHint: 'Bowling a bowling ball down a lane', timesPlayed: 0, isExplicit: false },
+      { id: 3, guessAction: 'Motorboating Boobs', forbiddenWords: [{word: 'Ball'}, {word: 'Alley'}, {word: 'Bowl'} ,{word: 'Roll'}, {word: 'Pin'}], descriptiveHint: 'Bowling a bowling ball down a lane', timesPlayed: 0, isExplicit: true },
+      { id: 4, guessAction: 'Eating Chips', forbiddenWords: [{word: 'Bag'}, {word: 'Lays'}, {word: 'Doritos'} ,{word: 'Potato'}, {word: 'Dig'}], descriptiveHint: 'Bowling a bowling ball down a lane', timesPlayed: 0, isExplicit: false },
+      { id: 5, guessAction: 'Drinking Bath Water', forbiddenWords: [{word: 'Ball'}, {word: 'Alley'}, {word: 'Bowl'} ,{word: 'Roll'}, {word: 'Pin'}], descriptiveHint: 'Bowling a bowling ball down a lane', timesPlayed: 0, isExplicit: false },
+      { id: 6, guessAction: 'Climbing Stairs', forbiddenWords: [{word: 'Ball'}, {word: 'Alley'}, {word: 'Bowl'} ,{word: 'Roll'}, {word: 'Pin'}], descriptiveHint: 'Bowling a bowling ball down a lane', timesPlayed: 0, isExplicit: false },
+      { id: 7, guessAction: 'Shooting a basketball', forbiddenWords: [{word: 'Hands'}, {word: 'Throw'}, {word: 'Launch'} ,{word: 'Curry'}, {word: 'Sport'}], descriptiveHint: 'Bowling a bowling ball down a lane', timesPlayed: 0, isExplicit: false },
     ],
+    currentCategory: {},
+    currentCard: {},
+    isPaused: false,
+    isShowExplicitCards: false,
+    currentStateIndex: 0,
+    currentRound: {
+      teamId: 1,
+      secondsRemaining: 60,
+      playedCards: [],
+    },
     teams: [
       {
         id: 1,
@@ -58,6 +59,14 @@ export const game = defineStore('game', {
     },
     currentState () {
       return this.gameStates[this.currentStateIndex]
+    },
+    filteredCards () {
+      return this.cards.filter((card) => {
+        const isPassedExplicitCheck = !card.isExplicit || this.isShowExplicitCards
+        if (isPassedExplicitCheck) {
+          return card
+        }
+      })
     }
   },
   actions: {
@@ -71,12 +80,13 @@ export const game = defineStore('game', {
         playedCards: [],
       }
 
+      this.isPaused = false
       this.currentCard = {}
     },
     goToNextState () {
       if (this.currentState === 'reviewRound') {
         // go to choose team
-        this.currentStateIndex = 2
+        this.currentStateIndex = 3
       } else {
         this.currentStateIndex++;
       }
@@ -84,5 +94,14 @@ export const game = defineStore('game', {
     goToPrevState () {
       this.currentStateIndex--;
     },
+    finishRound () {
+      this.currentRound.playedCards.push({
+        card: this.currentCard,
+        status: 'incomplete',
+        teamId: this.currentTeam.id
+      })
+      this.isPaused = true
+      this.goToNextState()
+    }
   },
 })

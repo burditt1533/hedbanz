@@ -16,7 +16,7 @@ const selectStartingWord = () => {
 </script>
 
 <template>
-  <div class="review-round-container">
+  <div class="choose-team-container">
     <div class="middle">
       <h4 class='select-team'>Select team for next round</h4>
 
@@ -42,15 +42,20 @@ const selectStartingWord = () => {
 </template>
 
 <style scoped lang="scss">
-  .review-round-container {
+  .choose-team-container {
     display: flex;
     justify-content: space-between;
     flex-direction: column;
     color: white;
     flex-grow: 1;
-    padding: 20px;
+    
 
     .middle {
+      padding: 20px;
+      overflow: scroll;
+      max-height: 76vh;
+      border-bottom: 1px solid #cc3737;
+
       .select-team {
         font-size: 16px;
         text-align: center;

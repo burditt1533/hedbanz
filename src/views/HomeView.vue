@@ -10,13 +10,11 @@ import BeforeStart from '@/components/BeforeStart.vue'
 import GameHeader from '@/components/GameHeader.vue'
 import GameReviewRound from '@/components/GameReviewRound.vue'
 import GameChooseTeam from '@/components/GameChooseTeam.vue'
+import GameTeamSetup from '@/components/GameTeamSetup.vue'
 
-// make categories work
-  // cards can have category ids?
-// make team screen
-// add ability to add more teams
-// add rating for cards to hide if explicit mode is checked
 // add way to save game, resume game later
+// better select team ui since more teams added
+// better team setup ui since more teams added
 
 // add more cards
 // come up with a name
@@ -25,7 +23,9 @@ import GameChooseTeam from '@/components/GameChooseTeam.vue'
 
 // make database
 // add a way to add/edit cards
-// how to delete cards from database
+// only show cards with active: true
+// make categories work
+  // cards can have category ids?
 
 // get biddy environment setup
   // node
@@ -39,6 +39,7 @@ const gameStore = game()
   <main class='game-container'>
     <GameHeader />
     <GameCategories v-if="gameStore.currentState === 'categories'" />
+    <GameTeamSetup v-if="gameStore.currentState === 'gameTeamSetup'" />
     <GameSettings v-if="gameStore.currentState === 'gameOptions'" />
     <SelectStartingWord v-if="gameStore.currentState === 'startingWord'" />
     <BeforeStart v-if="gameStore.currentState === 'beforeStart'" />

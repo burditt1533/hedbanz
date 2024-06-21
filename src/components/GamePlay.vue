@@ -1,6 +1,7 @@
 <script setup>
   import { computed, ref, onMounted, watch } from 'vue'
   import { game } from '@/stores/game'
+  import GameCard from '@/components/GameCard.vue'
   import Button from 'primevue/button';
   import Carousel from 'primevue/carousel';
   import Knob from 'primevue/knob';
@@ -33,15 +34,6 @@
     gameStore.currentCard = randomCards.value[randomCardIndex.value]
   }
 
-  const finishRound = () => {
-    gameStore.currentRound.playedCards.push({
-      card: gameStore.currentCard,
-      status: 'incomplete',
-      teamId: gameStore.currentTeam.id
-    })
-    gameStore.goToNextState()
-  }
-
   const togglePausedState = () => {
     gameStore.isPaused = !gameStore.isPaused
     if (!gameStore.isPaused) updateTime()
@@ -56,7 +48,7 @@
         gameStore.currentRound.secondsRemaining -= time / 1000;
         updateTime()
       } else {
-        finishRound()
+        gameStore.finishRound()
       }
     }, time)
   }
@@ -66,11 +58,11 @@
   }
 
   const filteredCards = computed(() => {
-    return gameStore.cards.filter(card => card.id !== gameStore.currentCard.id)
+    return gameStore.filteredCards.filter(card => card.id !== gameStore.currentCard.id)
   })
 
   onMounted(() => {
-    randomCards.value = _.sampleSize(filteredCards.value, gameStore.cards.length)
+    randomCards.value = _.sampleSize(filteredCards.value, gameStore.filteredCards.length)
     randomCards.value.unshift(gameStore.currentCard)
     updateTime()
   })
@@ -96,17 +88,7 @@
         :showIndicators='false'
       >
         <template #item="slotProps">
-          <div :class="['card-container', { paused: gameStore.isPaused }]">
-            <div class="guess-action">{{ slotProps.data.guessAction }}</div>
-            <div class="forbidden-words">
-              <div v-for='word in slotProps.data.forbiddenWords' :key='word'  class="forbidden-word">
-                {{ word }}
-              </div>
-            </div>
-            <div class="description">
-              {{ slotProps.data.descriptiveHint }}
-            </div>
-          </div>
+          <GameCard :cardData='slotProps.data' />
         </template>
       </Carousel>
     </div>
@@ -132,13 +114,13 @@
       font-weight: bold;
       font-size: 18px;
     }
+    .p-carousel {
+      pointer-events: none;
+    }
   }
 </style>
 
 <style scoped lang="scss">
-  .p-carousel {
-    pointer-events: none;
-  }
 
   .gameplay-container {
     width: 100%;
@@ -152,52 +134,6 @@
 
     .cards-container {
       width: 100%;
-
-      .card-container {
-        max-width: 90%;
-        border: 1px solid white;
-        border-radius: 10px;
-        background: white;
-        color: #F04A22;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        margin: 0 auto;
-
-        &.paused {
-          color: white;
-        }
-
-        .guess-action {
-          font-size: 25px;
-          font-weight: bold;
-          border-bottom: 1px solid rgb(229, 229, 229);
-          width: 100%;
-          padding: 10px;
-          text-align: center;
-        }
-
-        .forbidden-words {
-          padding: 20px;
-          font-size: 23px;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          gap: 10px;
-
-          .forbidden-word {
-            font-weight: bold;
-          }
-        }
-
-        .description {
-          padding: 15px;
-          font-size: 12px;
-          text-align: center;
-        }
-      }
     }
 
     .bottom-buttons {
