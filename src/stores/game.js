@@ -5,6 +5,7 @@ export const game = defineStore('game', {
   state: () => ({
     currentCategory: {},
     currentCard: {},
+    isPaused: false,
     gameStates: ['categories', 'gameOptions', 'chooseTeam', 'startingWord', 'beforeStart', 'gamePlay', 'reviewRound'],
     currentStateIndex: 0,
     currentRound: {

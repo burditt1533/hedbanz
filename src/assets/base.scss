@@ -1,6 +1,4 @@
-*,
-*::before,
-*::after {
+*{
   box-sizing: border-box;
   margin: 0;
   font-weight: normal;
@@ -36,6 +34,10 @@ body {
     border-color: white;
     color: #F04A22;
 
+    .p-button-label {
+      font-weight: 600;
+    }
+
     &:not(:disabled):active, &:not(:disabled):hover {
       background: rgb(228, 228, 228);
       border-color: rgb(224, 224, 224);
@@ -60,6 +62,10 @@ body {
     background: #F04A22;
     border-color: #F04A22;
     color: white;
+
+    .p-button-label {
+      font-weight: 600;
+    }
   
     &:not(:disabled):active, &:not(:disabled):hover {
       background: #F04A22;

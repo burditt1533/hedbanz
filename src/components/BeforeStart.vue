@@ -6,7 +6,7 @@
   const countDownNumber = ref(4)
 
   const startGame = () => {
-    if (countDownNumber.value > 0) {
+    if (countDownNumber.value > 1) {
       countDownNumber.value--
       setTimeout(() => {
         startGame();

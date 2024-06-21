@@ -93,6 +93,7 @@
       text-align: center;
       width: 80%;
       margin: 6px auto;
+      color: white;
     }
 
     .teams {

@@ -42,16 +42,27 @@
     gameStore.goToNextState()
   }
 
+  const togglePausedState = () => {
+    gameStore.isPaused = !gameStore.isPaused
+    if (!gameStore.isPaused) updateTime()
+  }
+
   const updateTime = () => {
     const time = 1000
     setTimeout(() => {
-      if(gameStore.currentRound.secondsRemaining > 0) {
+      if (gameStore.isPaused) return
+
+      if (gameStore.currentRound.secondsRemaining > 0) {
         gameStore.currentRound.secondsRemaining -= time / 1000;
         updateTime()
       } else {
         finishRound()
       }
     }, time)
+  }
+
+  const knobText = (value) => {
+    return gameStore.isPaused ? '▶' : value.toFixed(0)
   }
 
   const filteredCards = computed(() => {
@@ -72,8 +83,8 @@
       readonly
       :max='gameStore.options.secondsPerRound'
       :size='100'
-      @click="gameStore.currentRound.secondsRemaining = 0"
-      :valueTemplate="(value) => value.toFixed(0)"
+      @click="togglePausedState"
+      :valueTemplate="knobText"
     />
     <div class="cards-container">
       <Carousel
@@ -85,7 +96,7 @@
         :showIndicators='false'
       >
         <template #item="slotProps">
-          <div class="card-container">
+          <div :class="['card-container', { paused: gameStore.isPaused }]">
             <div class="guess-action">{{ slotProps.data.guessAction }}</div>
             <div class="forbidden-words">
               <div v-for='word in slotProps.data.forbiddenWords' :key='word'  class="forbidden-word">
@@ -95,15 +106,15 @@
             <div class="description">
               {{ slotProps.data.descriptiveHint }}
             </div>
-            
           </div>
         </template>
       </Carousel>
     </div>
 
     <div class="bottom-buttons">
-      <Button @click='skipCard' label='Skip -1' />
-      <Button @click='goToNextCard' label='Next +1' />
+      <Button @click='skipCard' :disabled='gameStore.isPaused' label='Skip -1' />
+      <Button @click='togglePausedState' :icon="gameStore.isPaused ? 'ri-play-line': 'ri-pause-line'" />
+      <Button @click='goToNextCard' :disabled='gameStore.isPaused' label='Next +1' />
     </div>
   </div>
 </template>
@@ -153,6 +164,10 @@
         justify-content: center;
         align-items: center;
         margin: 0 auto;
+
+        &.paused {
+          color: white;
+        }
 
         .guess-action {
           font-size: 25px;

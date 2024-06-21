@@ -15,15 +15,17 @@ import GameChooseTeam from '@/components/GameChooseTeam.vue'
   // cards can have category ids?
 // make team screen
 // add ability to add more teams
-// add more cards
 // add rating for cards to hide if explicit mode is checked
+// add way to save game, resume game later
+
+// add more cards
 // come up with a name
 // logo ideas
 // color scheme
-// add way to pause/continue gameplay
 
 // make database
 // add a way to add/edit cards
+// how to delete cards from database
 
 // get biddy environment setup
   // node

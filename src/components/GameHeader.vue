@@ -23,12 +23,19 @@
       label: 'Menu',
       items: [
         {
-          label: 'Stop Game',
-          icon: 'ri-stop-fill'
+          label: 'Finish Round',
+          icon: 'ri-stop-fill',
+          command: () => gameStore.currentRound.secondsRemaining = 0
         },
         {
-          label: 'Game Options',
-          icon: 'ri-settings-2-line'
+          label: 'Reset',
+          icon: 'ri-stop-fill',
+          command: () => location.reload()
+        },
+        {
+          label: 'Card Management',
+          icon: 'ri-settings-2-line',
+          command: () => router.push('card_management')
         }
       ]
     }
@@ -66,19 +73,20 @@
   }
 
   .p-menu-list {
-    .p-menu-submenu-label {
+    .p-submenu-header {
       color: #F04A22;
+      font-weight: bold;
     }
 
-    .p-menu-item:not(.p-disabled) {
-      .p-menu-item-content, .p-menu-item-content:hover, .p-menu-item-icon {
+    .p-menuitem:not(.p-disabled) {
+      .p-menuitem-content, .p-menuitem-content:hover, .p-menuitem-icon, .p-menuitem-text {
         color: #F04A22;
         background: none;
-        font-weight: bold;
 
-        .p-menu-item-icon {
+        .p-menuitem-icon {
           font-weight: bold;
           color: #F04A22;
+          margin-right: 5px;
         }
       }
     }
