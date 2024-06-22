@@ -62,6 +62,7 @@
       justify-content: center;
       flex-direction: column;
       gap: 30px;
+      width: 100%;
 
       .option {
         font-size: 23px;

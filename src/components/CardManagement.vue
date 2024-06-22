@@ -14,6 +14,9 @@
   import Menubar from 'primevue/menubar';
   import router from '@/router'
   import { useConfirm } from "primevue/useconfirm";
+  import PocketBase from 'pocketbase'
+
+  const pb = new PocketBase('http://127.0.0.1:8090');
 
   const confirm = useConfirm();
   const gameStore = game()
@@ -79,22 +82,28 @@ const onCellEditComplete = (event) => {
   data[field] = newValue
 };
 
-const addCard = () => {
-  gameStore.cards.push({
-    id: 8,
-    guessAction: 'action',
-    forbiddenWords: [{word: 'ball'}, {word: 'ball'}, {word: 'ball'} ,{word: 'ball'}, {word: 'ball'}],
-    descriptiveHint: 'hint',
-    timesPlayed: 0,
-    isExplicit: false
-  })
-  currentEditingCard.value = gameStore.cards[gameStore.cards.length - 1]
+const addCard = async () => {
+  const newCard = await pb.collection('cards').create({
+    "guessAction": "testing",
+    "isExplicit": false,
+    "forbiddenWords": [{"word": 'ball'}, {"word": 'ball'}, {"word": 'ball'} ,{"word": 'ball'}, {"word": 'ball'}],
+    "descriptiveHint": "This is a hint"
+  });
 
+  await gameStore.fetchCards()
+
+  currentEditingCard.value = gameStore.cards.find(({id}) => newCard.id === id)
   isModalOpen.value = true
 }
 
-const deleteCard = (card) => {
-  gameStore.cards = gameStore.cards.filter(gameCard => gameCard.id !== card.id)
+const deleteCard = async (card) => {
+  await pb.collection('cards').delete(card.id);
+  gameStore.fetchCards()
+}
+
+const updateCard = async (card) => {
+  await pb.collection('cards').update(card.id, card);
+  gameStore.fetchCards()
 }
 
 const editInModal = (card, field) => {
@@ -102,6 +111,10 @@ const editInModal = (card, field) => {
   currentEditingCard.value = card
   isModalOpen.value = true
 }
+
+onMounted(async () => {
+  gameStore.fetchCards()
+})
 
 </script>
 
@@ -121,7 +134,7 @@ const editInModal = (card, field) => {
           table: { style: 'table-layout: auto' },
           column: {
             bodycell: ({ state }) => ({
-                class: [{ 'editing': state['d_editing'] }]
+              class: [{ 'editing': state['d_editing'] }]
             })
           }
         }"
@@ -165,6 +178,11 @@ const editInModal = (card, field) => {
         <Column :header="'Delete'" :style="{ cursor: 'pointer' }">
           <template #body="{ data }" >
             <i @click='confirm1($event, data)' class="ri-delete-bin-line"></i>
+          </template>
+        </Column>
+        <Column :header="'Update'" :style="{ cursor: 'pointer' }">
+          <template #body="{ data }" >
+            <i @click='updateCard(data)' class="ri-check-line"></i>
           </template>
         </Column>
       </DataTable>

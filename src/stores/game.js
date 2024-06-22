@@ -1,5 +1,8 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
+import PocketBase from 'pocketbase'
+
+const pb = new PocketBase('http://127.0.0.1:8090');
 
 export const game = defineStore('game', {
   state: () => ({
@@ -14,15 +17,16 @@ export const game = defineStore('game', {
       { id: 7, name: 'Movie', timesPlayed: 2, rating: 5, difficulty: 4, icon: 'ri-movie-line', description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.' },
       { id: 8, name: 'Frozen', timesPlayed: 2, rating: 2,  difficulty: 4, icon: 'ri-snowflake-line', description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.' },
     ],
-    cards: [
-      { id: 1, guessAction: 'Bowling', forbiddenWords: [{word: 'Ball'}, {word: 'Alley'}, {word: 'Bowl'} ,{word: 'Roll'}, {word: 'Pin'}], descriptiveHint: 'Bowling a bowling ball down a lane', timesPlayed: 0, isExplicit: false },
-      { id: 2, guessAction: 'Swimming In A Lake', forbiddenWords: [{word: 'Stroke'}, {word: 'Water'}, {word: 'Bowl'} ,{word: 'Roll'}, {word: 'Pin'}], descriptiveHint: 'Bowling a bowling ball down a lane', timesPlayed: 0, isExplicit: false },
-      { id: 3, guessAction: 'Motorboating Boobs', forbiddenWords: [{word: 'Ball'}, {word: 'Alley'}, {word: 'Bowl'} ,{word: 'Roll'}, {word: 'Pin'}], descriptiveHint: 'Bowling a bowling ball down a lane', timesPlayed: 0, isExplicit: true },
-      { id: 4, guessAction: 'Eating Chips', forbiddenWords: [{word: 'Bag'}, {word: 'Lays'}, {word: 'Doritos'} ,{word: 'Potato'}, {word: 'Dig'}], descriptiveHint: 'Bowling a bowling ball down a lane', timesPlayed: 0, isExplicit: false },
-      { id: 5, guessAction: 'Drinking Bath Water', forbiddenWords: [{word: 'Ball'}, {word: 'Alley'}, {word: 'Bowl'} ,{word: 'Roll'}, {word: 'Pin'}], descriptiveHint: 'Bowling a bowling ball down a lane', timesPlayed: 0, isExplicit: false },
-      { id: 6, guessAction: 'Climbing Stairs', forbiddenWords: [{word: 'Ball'}, {word: 'Alley'}, {word: 'Bowl'} ,{word: 'Roll'}, {word: 'Pin'}], descriptiveHint: 'Bowling a bowling ball down a lane', timesPlayed: 0, isExplicit: false },
-      { id: 7, guessAction: 'Shooting a basketball', forbiddenWords: [{word: 'Hands'}, {word: 'Throw'}, {word: 'Launch'} ,{word: 'Curry'}, {word: 'Sport'}], descriptiveHint: 'Bowling a bowling ball down a lane', timesPlayed: 0, isExplicit: false },
-    ],
+    // cardsOld: [
+    //   { id: 1, guessAction: 'Bowling', forbiddenWords: [{word: 'Ball'}, {word: 'Alley'}, {word: 'Bowl'} ,{word: 'Roll'}, {word: 'Pin'}], descriptiveHint: 'Bowling a bowling ball down a lane', timesPlayed: 0, isExplicit: false },
+    //   { id: 2, guessAction: 'Swimming In A Lake', forbiddenWords: [{word: 'Stroke'}, {word: 'Water'}, {word: 'Bowl'} ,{word: 'Roll'}, {word: 'Pin'}], descriptiveHint: 'Bowling a bowling ball down a lane', timesPlayed: 0, isExplicit: false },
+    //   { id: 3, guessAction: 'Motorboating Boobs', forbiddenWords: [{word: 'Ball'}, {word: 'Alley'}, {word: 'Bowl'} ,{word: 'Roll'}, {word: 'Pin'}], descriptiveHint: 'Bowling a bowling ball down a lane', timesPlayed: 0, isExplicit: true },
+    //   { id: 4, guessAction: 'Eating Chips', forbiddenWords: [{word: 'Bag'}, {word: 'Lays'}, {word: 'Doritos'} ,{word: 'Potato'}, {word: 'Dig'}], descriptiveHint: 'Bowling a bowling ball down a lane', timesPlayed: 0, isExplicit: false },
+    //   { id: 5, guessAction: 'Drinking Bath Water', forbiddenWords: [{word: 'Ball'}, {word: 'Alley'}, {word: 'Bowl'} ,{word: 'Roll'}, {word: 'Pin'}], descriptiveHint: 'Bowling a bowling ball down a lane', timesPlayed: 0, isExplicit: false },
+    //   { id: 6, guessAction: 'Climbing Stairs', forbiddenWords: [{word: 'Ball'}, {word: 'Alley'}, {word: 'Bowl'} ,{word: 'Roll'}, {word: 'Pin'}], descriptiveHint: 'Bowling a bowling ball down a lane', timesPlayed: 0, isExplicit: false },
+    //   { id: 7, guessAction: 'Shooting a basketball', forbiddenWords: [{word: 'Hands'}, {word: 'Throw'}, {word: 'Launch'} ,{word: 'Curry'}, {word: 'Sport'}], descriptiveHint: 'Bowling a bowling ball down a lane', timesPlayed: 0, isExplicit: false },
+    // ],
+    cards: [],
     currentCategory: {},
     currentCard: {},
     isPaused: false,
@@ -102,6 +106,10 @@ export const game = defineStore('game', {
       })
       this.isPaused = true
       this.goToNextState()
+    },
+    async fetchCards () {
+      const cards = await pb.collection('cards').getFullList({ sort: '-created' });
+      this.cards = cards
     }
   },
 })
