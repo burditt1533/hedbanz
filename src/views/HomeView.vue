@@ -16,7 +16,7 @@ import PocketBase from 'pocketbase'
 const pb = new PocketBase('http://127.0.0.1:8090');
 
 // add way to save game, resume game later
-// better select team ui since more teams added
+// instructions on team setup page (up to 4 teams bla bla bla)
 // better team setup ui since more teams added
 
 // add more cards
@@ -24,7 +24,6 @@ const pb = new PocketBase('http://127.0.0.1:8090');
 // logo ideas
 // color scheme
 
-// make database
 // add a way to add/edit cards
 // only show cards with active: true
 // make categories work
@@ -36,24 +35,8 @@ const pb = new PocketBase('http://127.0.0.1:8090');
 
 const gameStore = game()
 
-onMounted(async () => {
-  // list and filter "example" collection records
-// const result = await pb.collection('example').getList(1, 20, {
-//     filter: 'status = true && created > "2022-08-01 10:00:00"'
-// });
-
-// authenticate as auth collection record
-// const userData = await pb.collection('users').authWithPassword('phileasy2002@gmail.com', 'Sluget2880!');
-
-// or as super-admin
-// const adminData = await pb.admins.authWithPassword('phileasy2002@gmail.com', 'Sluget2880!');
-
-// fetch a paginated records list
-const cards = await pb.collection('cards').getFullList({ sort: '-created' });
-gameStore.cards = cards
-
-console.log(cards)
-
+onMounted(() => {
+  gameStore.fetchCards()
 })
 
 </script>

@@ -56,7 +56,7 @@ const moveCard = (card) => {
             class="card"
             @click='moveCard(groupCard)'
           >
-            <div>{{ groupCard.card?.guessAction }} {{ cardType.amount }}</div>
+            <div>{{ groupCard.card?.guess_action }} {{ cardType.amount }}</div>
           </div>
         </div>
       </div>
@@ -117,7 +117,6 @@ const moveCard = (card) => {
     }
 
     .bottom {
-      // height: 200px;
       border-top: 1px solid #c42612;
       padding: 15px;
       display: flex;

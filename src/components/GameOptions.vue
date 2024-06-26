@@ -92,18 +92,17 @@
       width: 100%;
       display: flex;
       background: #d1d1d124;
-      padding: 10px;
+      padding: 15px;
       align-items: center;
       justify-content: space-between;
       border-radius: 5px;
       min-height: 75px;
-      box-shadow: 0 0 6px -4px rgb(0 0 0 / 49%);
       color: white;
       border: 1px solid #ce2d1c;
 
       .option-name {
         font-weight: bold;
-        font-size: 18px;
+        font-size: 14px;
         text-align: center;
       }
 

@@ -33,7 +33,7 @@ export const game = defineStore('game', {
     isShowExplicitCards: false,
     currentStateIndex: 0,
     currentRound: {
-      teamId: 1,
+      teamId: null,
       secondsRemaining: 60,
       playedCards: [],
     },
@@ -55,9 +55,12 @@ export const game = defineStore('game', {
       numberOfRounds: 5,
       pointsToWin: 30,
       secondsPerRound: 60
-    },
+    }
   }),
   getters: {
+    serverUrl () {
+      return false ? 'http://127.0.0.1:3000' : 'https://home-dashboard-backend.onrender.com'
+    },
     currentTeam () {
       return this.teams.find((team) => this.currentRound.teamId === team.id) || {}
     },
@@ -79,7 +82,7 @@ export const game = defineStore('game', {
     },
     initNextRound () {
       this.currentRound = {
-        teamId: 1,
+        teamId: null,
         secondsRemaining: this.options.secondsPerRound,
         playedCards: [],
       }
@@ -108,7 +111,8 @@ export const game = defineStore('game', {
       this.goToNextState()
     },
     async fetchCards () {
-      const cards = await pb.collection('cards').getFullList({ sort: '-created' });
+      let cards = await fetch(`${this.serverUrl}/cards.json`)
+      cards = await cards.json()
       this.cards = cards
     }
   },

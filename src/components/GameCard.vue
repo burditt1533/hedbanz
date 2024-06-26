@@ -21,12 +21,12 @@
 <template>
   <div :class="['card-container', { paused: gameStore.isPaused }]">
     <div class="guess-action">
-      <InputText v-if='isAllowEdit' v-model="cardData.guessAction" />
-      <div v-else>{{ cardData.guessAction }}</div>
+      <InputText v-if='isAllowEdit' v-model="cardData.guess_action" />
+      <div v-else>{{ cardData.guess_action }}</div>
     </div>
     <div class="forbidden-words">
-      <div v-for='(word, index) in cardData.forbiddenWords' :key='word' class="forbidden-word">
-        <InputText v-if='isAllowEdit' v-model="cardData.forbiddenWords[index].word" />
+      <div v-for='(word, index) in cardData.forbidden_words' :key='word' class="forbidden-word">
+        <InputText v-if='isAllowEdit' v-model="cardData.forbidden_words[index].word" />
         <div v-else>{{ word.word }}</div>
       </div>
     </div>

@@ -28,29 +28,26 @@
       completedRounds: []
     })
   }
+
+  const removeTeam = (removeTeam) => {
+    gameStore.teams = gameStore.teams.filter(team => team.id !== removeTeam.id)
+  }
 </script>
 
 <template>
   <div class="game-teams-container">
     <div class="teams">
-      <div v-for='(team, index) in gameStore.teams' :key='team.id' >
-        <InputText v-model="team.name" />
-        <div v-if='index < gameStore.teams.length - 1' class='vs'>
-          vs
+      <h2 class='head'>Team Setup</h2>
+      <div v-for='team in gameStore.teams' :key='team.id' class='team-wrapper' >
+        <div class="team-top">
+          <i v-if='gameStore.teams.length > 2' @click='removeTeam(team)' class="ri-close-line"></i>
         </div>
+        <InputText v-model="team.name" />
       </div>
-      <Button
-        type="button"
-        class='add-button'
-        :disabled='isTeamsMaxed'
-        icon="ri-add-line"
-        rounded
-        raised
-        @click="addTeam" />
+      <div v-if='!isTeamsMaxed' @click="addTeam" class="team-wrapper add">
+        <i class="ri-add-line"></i>
+      </div>
     </div>
-
-
-
     <div class="bottom">
       <Button @click='startGame' label="Next" />
     </div>
@@ -69,45 +66,75 @@
 
     .p-inputtext {
       background: none;
-      font-size: 40px;
-      line-height: 40px;
+      font-size: 20px;
+      line-height: 20px;
       font-weight: bold;
       box-shadow: none;
       border: 0;
-      padding: 0;
+      padding: 5px;
       text-align: center;
-      width: 80%;
+      width: 100%;
       margin: 6px auto;
       color: #F04A22;
+
+      &:focus {
+        border: 0;
+        outline: 0;
+      }
     }
 
     .teams {
       width: 100%;
-      padding: 20px 0;
+      height: 100%;
+      padding: 20px;
       overflow: scroll;
       background: white;
       color: #F04A22;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      flex: 1;
+      display: grid;
+      grid-template-areas: 
+        "heading heading";
+      grid-template-rows: auto 80px 80px;
+      grid-template-columns: 45% 45%;
+      justify-content: space-evenly;
+      align-content: start;
+      gap: 20px;
+
+      .head {
+        font-size: 20px;
+        font-weight: bold;
+        text-align: center;
+        grid-area: heading;
+      }
+
+      .team-wrapper {
+        border: 1px solid rgb(215, 215, 215);
+        border-radius: 5px;
+        position: relative;
+        display: flex;
+        align-items: center;
+
+        &.add {
+          justify-content: center;
+          color: rgb(189, 189, 189);
+          font-size: 30px;
+        }
+
+        .team-top {
+          display: flex;
+          justify-content: flex-end;
+          position: absolute;
+          top: 0;
+          width: 100%;
+          padding: 0 3px;
+          color: rgb(189, 189, 189);
+        }
+
+      }
 
       .add-button {
-        // background: #F04A22;
-        // color: white;
-        // border: none;
-      }
-
-      .team-name {
-        font-size: 40px;
-        line-height: 40px;
-        font-weight: bold;
-      }
-
-      .vs {
-        font-size: 20px;
-        line-height: 20px;
+        grid-area: footer;
+        justify-self: center;
+        align-self: center;
       }
     }
 

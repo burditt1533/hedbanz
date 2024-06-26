@@ -23,18 +23,18 @@
   const products = ref();
   const columns = ref([
     { field: 'id', header: 'ID', width: '3%' },
-    { field: 'guessAction', header: 'Action' },
-    { field: 'forbiddenWords', header: 'Forbidden Words' },
-    { field: 'descriptiveHint', header: 'Hint' },
-    { field: 'timesPlayed', header: 'Played' },
-    { field: 'isExplicit', header: 'isExplicit' }
+    { field: 'guess_action', header: 'Action' },
+    { field: 'forbidden_words', header: 'Forbidden Words' },
+    { field: 'descriptive_hint', header: 'Hint' },
+    { field: 'times_played', header: 'Played' },
+    { field: 'is_explicit', header: 'isExplicit' }
   ]);
   const isModalOpen = ref(false)
   const currentEditingCard = ref({})
   const confirm1 = (event, data) => {
     confirm.require({
         target: event.currentTarget,
-        message: `Delete '${data.guessAction}' card?`,
+        message: `Delete '${data.guess_action}' card?`,
         rejectClass: 'p-button-secondary p-button-outlined p-button-sm',
         acceptClass: 'p-button-sm p-button-danger',
         rejectLabel: 'No',
@@ -84,10 +84,10 @@ const onCellEditComplete = (event) => {
 
 const addCard = async () => {
   const newCard = await pb.collection('cards').create({
-    "guessAction": "testing",
-    "isExplicit": false,
-    "forbiddenWords": [{"word": 'ball'}, {"word": 'ball'}, {"word": 'ball'} ,{"word": 'ball'}, {"word": 'ball'}],
-    "descriptiveHint": "This is a hint"
+    "guess_action": "testing",
+    "is_explicit": false,
+    "forbidden_words": [{"word": 'ball'}, {"word": 'ball'}, {"word": 'ball'} ,{"word": 'ball'}, {"word": 'ball'}],
+    "descriptive_hint": "This is a hint"
   });
 
   await gameStore.fetchCards()
@@ -147,7 +147,7 @@ onMounted(async () => {
           :style="{ width: col.width, cursor: 'pointer' }"
         >
           <template #body="{ data, field }" >
-            <div v-if="col.field === 'forbiddenWords'" @click='editInModal(data)'>
+            <div v-if="col.field === 'forbidden_words'" @click='editInModal(data)'>
               <span v-for='(thing, index) in data[field]' :key='thing'>
                 {{ thing.word }}
                 <span v-if='index < data[field].length - 1' class='seperator'>
@@ -160,14 +160,14 @@ onMounted(async () => {
             </div>
           </template>
           
-          <template v-if="['timesPlayed', 'isExplicit'].includes(col.field)" #editor="{ data, field }">
-            <template v-if="field === 'timesPlayed'">
+          <template v-if="['times_played', 'is_explicit'].includes(col.field)" #editor="{ data, field }">
+            <template v-if="field === 'times_played'">
               <InputNumber v-model="data[field]" showButtons autofocus buttonLayout="horizontal" inputStyle="width: 3rem" :min="0" :max="99" />
             </template>
-            <template v-else-if="field === 'isExplicit'">
+            <template v-else-if="field === 'is_explicit'">
               <InputSwitch v-model="data[field]" />
             </template>
-            <template v-else-if="field === 'forbiddenWords'">
+            <template v-else-if="field === 'forbidden_words'">
               <Chips v-model="data[field]" :allowDuplicate='false' separator=',' :max='5' />
             </template>
             <template v-else>

@@ -32,7 +32,7 @@
         @click='selectCard(card)'
         :class="['option', { selected: card.id === gameStore.currentCard?.id }]"
       >
-        {{ card.guessAction }}
+        {{ card.guess_action }}
       </div>
     </div>
 

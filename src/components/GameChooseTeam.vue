@@ -30,13 +30,17 @@ const selectStartingWord = () => {
           <div class="team-name">{{ team.name }}</div>
           <div class="team-score">{{ team.score }}</div>
           <div class="team-rounds">
-            {{team.completedRounds.length}}/{{ gameStore.options.numberOfRounds }} Rounds
+            {{ team.completedRounds.length }}/{{ gameStore.options.numberOfRounds }} Rounds
           </div>
         </div>
       </div>
     </div>
     <div class="bottom">
-      <Button @click='selectStartingWord' label="Choose Starting Word" />
+      <Button
+        @click='selectStartingWord'
+        :disabled='!gameStore.currentRound.teamId'
+        label="Continue"
+      />
     </div>
   </div>
 </template>
@@ -48,13 +52,11 @@ const selectStartingWord = () => {
     flex-direction: column;
     color: white;
     flex-grow: 1;
-    
 
     .middle {
       padding: 20px;
       overflow: scroll;
       max-height: 76vh;
-      border-bottom: 1px solid #cc3737;
 
       .select-team {
         font-size: 16px;
@@ -64,22 +66,18 @@ const selectStartingWord = () => {
       }
 
       .teams {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-          gap: 40px;
+        display: grid;
+        grid-template-areas: "team team";
+        gap: 10px;
 
         .team {
-          border: 3px solid rgba(255, 255, 255, 0.263);
+          border: 2px solid rgba(255, 255, 255, 0.263);
           display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: center;
           border-radius: 8px;
-          padding: 15px 10px;
-          width: 100%;
-          margin: 0 20px;
+          padding: 7px;
 
           &.selected {
             border-color: white;
@@ -87,21 +85,21 @@ const selectStartingWord = () => {
 
           .team-name {
             font-weight: bold;
-            font-size: 40px;
-            line-height: 40px;
+            font-size: 25px;
+            line-height: 25px;
             margin-bottom: 10px;
           }
 
           .team-score {
-            font-size: 40px;
-            line-height: 40px;
+            font-size: 20px;
+            line-height: 20px;
             font-weight: bold;
           }
 
           .team-rounds {
-            align-self: flex-end;
             font-weight: bold;
             font-size: 11px;
+            margin-top: 14px;
           }
         }
       }
@@ -113,5 +111,4 @@ const selectStartingWord = () => {
       justify-content: center;
     }
   }
-
 </style>
